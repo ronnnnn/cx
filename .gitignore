@@ -1,0 +1,18 @@
+# Miscellaneous
+**/.DS_Store
+
+# IntelliJ
+*.iml
+*.ipr
+*.iws
+**/.idea/
+
+# VSCode
+**/.vscode/
+
+# Node.js
+node_modules/
+
+# bun
+bun.lock
+

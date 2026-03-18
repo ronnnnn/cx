@@ -1,0 +1,33 @@
+{
+  $schema: 'https://docs.renovatebot.com/renovate-schema.json',
+  extends: [
+    // https://docs.renovatebot.com/presets-config/#configbest-practices
+    'config:best-practices',
+    ':semanticCommits',
+    ':semanticCommitTypeAll(deps)',
+    ':semanticCommitScopeDisabled',
+    'schedule:daily',
+  ],
+  timezone: 'Asia/Tokyo',
+  labels: ['dep'],
+  branchPrefix: 'deps-renovate-',
+  major: {
+    minimumReleaseAge: '5 days',
+  },
+  minor: {
+    minimumReleaseAge: '3 days',
+  },
+  patch: {
+    minimumReleaseAge: '2 days',
+  },
+  assignees: ['@ronnnnn'],
+  assigneesSampleSize: 1,
+  // https://docs.renovatebot.com/configuration-options/#configmigration
+  // https://github.com/renovatebot/renovate/issues/16359
+  configMigration: false,
+  // https://docs.renovatebot.com/configuration-options/#vulnerabilityalerts
+  vulnerabilityAlerts: {
+    enabled: true,
+    labels: ['dep', 'sec'],
+  },
+}

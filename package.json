@@ -1,0 +1,16 @@
+{
+  "name": "cx",
+  "private": true,
+  "scripts": {
+    "fmt": "prettier --write '**/*.+(md|yaml|yml|json|json5)'",
+    "preinstall": "npx only-allow bun",
+    "prepare": "lefthook install"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "20.4.1",
+    "@commitlint/config-conventional": "20.4.1",
+    "lefthook": "2.1.1",
+    "prettier": "3.8.1",
+    "prettier-plugin-packagejson": "3.0.0"
+  }
+}
