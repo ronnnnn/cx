@@ -1,0 +1,13 @@
+{
+  "name": "codex",
+  "description": "Codex-native project instruction management for AGENTS.md and reusable local skills.",
+  "interface": {
+    "displayName": "Codex",
+    "shortDescription": "Create and maintain AGENTS.md and Codex-oriented repo rules.",
+    "developerName": "ronnnnn",
+    "category": "Productivity",
+    "capabilities": ["Read", "Write"],
+    "websiteUrl": "https://github.com/ronnnnn/cx",
+    "defaultPrompt": "codex:init を使って AGENTS.md を整備して"
+  }
+}

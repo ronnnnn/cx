@@ -1,0 +1,37 @@
+{
+  "name": "cx",
+  "plugins": [
+    {
+      "name": "git",
+      "source": {
+        "source": "local",
+        "path": "./plugins/git"
+      },
+      "category": "Productivity"
+    },
+    {
+      "name": "codex",
+      "source": {
+        "source": "local",
+        "path": "./plugins/codex"
+      },
+      "category": "Productivity"
+    },
+    {
+      "name": "catch-up",
+      "source": {
+        "source": "local",
+        "path": "./plugins/catch-up"
+      },
+      "category": "Productivity"
+    },
+    {
+      "name": "dev",
+      "source": {
+        "source": "local",
+        "path": "./plugins/dev"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

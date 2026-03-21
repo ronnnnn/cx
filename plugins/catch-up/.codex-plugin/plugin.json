@@ -1,0 +1,13 @@
+{
+  "name": "catch-up",
+  "description": "Codex plugin for technical research and version catch-up workflows.",
+  "interface": {
+    "displayName": "Catch-up",
+    "shortDescription": "Technical research and version catch-up guidance.",
+    "developerName": "ronnnnn",
+    "category": "Productivity",
+    "capabilities": ["Read", "Research"],
+    "websiteUrl": "https://github.com/ronnnnn/cx",
+    "defaultPrompt": "tech-research を使って最新仕様を調査して"
+  }
+}

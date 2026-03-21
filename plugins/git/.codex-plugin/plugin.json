@@ -1,0 +1,13 @@
+{
+  "name": "git",
+  "description": "Git and GitHub workflows for Codex, including commit, review, PR, CI, and worktree guidance.",
+  "interface": {
+    "displayName": "Git",
+    "shortDescription": "Codex-native Git and GitHub workflows.",
+    "developerName": "ronnnnn",
+    "category": "Productivity",
+    "capabilities": ["Read", "Write"],
+    "websiteUrl": "https://github.com/ronnnnn/cx",
+    "defaultPrompt": "git:review を使ってローカル差分をレビューして"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "dev",
+  "description": "Development workflow helpers for comments, planning, and explicit parallel execution in Codex.",
+  "interface": {
+    "displayName": "Dev",
+    "shortDescription": "Comment, plan, and parallelize work with Codex-native constraints.",
+    "developerName": "ronnnnn",
+    "category": "Productivity",
+    "capabilities": ["Read", "Write"],
+    "websiteUrl": "https://github.com/ronnnnn/cx",
+    "defaultPrompt": "dev:plan を使って作業計画を作って"
+  }
+}
