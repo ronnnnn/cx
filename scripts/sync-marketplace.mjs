@@ -1,5 +1,5 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
-import { dirname, resolve } from 'node:path';
+import { dirname, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { homedir } from 'node:os';
 
@@ -25,12 +25,23 @@ const normalized = {
     }
 
     const pluginRoot = resolve(repoRoot, relativePath.replace(/^\.\//, ''));
+    const relativeFromAgentsHome = relative(agentsHome, pluginRoot);
+
+    if (
+      !relativeFromAgentsHome ||
+      relativeFromAgentsHome.startsWith('..') ||
+      relativeFromAgentsHome.split(sep).includes('..')
+    ) {
+      throw new Error(
+        `Cannot express ${pluginRoot} as a local marketplace path under ${agentsHome}.`,
+      );
+    }
 
     return {
       ...plugin,
       source: {
         ...plugin.source,
-        path: pluginRoot,
+        path: `./${relativeFromAgentsHome.split(sep).join('/')}`,
       },
     };
   }),
