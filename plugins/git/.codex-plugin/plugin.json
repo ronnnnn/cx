@@ -1,9 +1,9 @@
 {
   "name": "git",
-  "description": "Git and GitHub workflows for Codex, including commit, review, PR, CI, and worktree guidance.",
+  "description": "commit、review、PR、CI、worktree を含む Codex 向け Git / GitHub plugin です。",
   "interface": {
     "displayName": "Git",
-    "shortDescription": "Codex-native Git and GitHub workflows.",
+    "shortDescription": "Codex 向けの Git / GitHub ワークフローです。",
     "developerName": "ronnnnn",
     "category": "Productivity",
     "capabilities": ["Read", "Write"],

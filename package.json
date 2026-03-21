@@ -4,7 +4,8 @@
   "scripts": {
     "fmt": "prettier --write '**/*.+(md|yaml|yml|json|json5)'",
     "preinstall": "npx only-allow bun",
-    "prepare": "lefthook install"
+    "prepare": "lefthook install",
+    "sync:marketplace": "node ./scripts/sync-marketplace.mjs"
   },
   "devDependencies": {
     "@commitlint/cli": "20.4.1",

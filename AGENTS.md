@@ -2,13 +2,13 @@
 
 ## プロジェクト構成
 
-このリポジトリは、Codex 向け marketplace と local plugin 群を管理します。marketplace 定義は `.agents/plugins/marketplace.json`、バージョン管理は `.agents/plugins/versions.json` にあります。各 plugin は `plugins/<name>/` 配下にまとまり、`.codex-plugin/plugin.json`、`README.md`、`skills/<skill>/SKILL.md`、必要に応じて `skills/*/references/*.md` を持ちます。repo-local の補助 skill は `.codex/skills/` に置きます。
+このリポジトリは、Codex 向け marketplace と local plugin 群を管理します。marketplace 定義は `.agents/plugins/marketplace.json` にあり、各 plugin は `plugins/<name>/` 配下にまとまり、`.codex-plugin/plugin.json`、`README.md`、`skills/<skill>/SKILL.md`、必要に応じて `skills/*/references/*.md` を持ちます。repo-local の補助ファイルは `.codex/` 配下に置きます。
 
 ## ビルド・検証・開発コマンド
 
 - `bun run fmt`: Markdown、YAML、JSON、JSON5 を整形します。
 - `bun prettier --write <path>`: 特定ファイルだけを整形します。
-- `jq empty .agents/plugins/marketplace.json .agents/plugins/versions.json plugins/*/.codex-plugin/plugin.json`: marketplace と manifest の JSON を検証します。
+- `jq empty .agents/plugins/marketplace.json plugins/*/.codex-plugin/plugin.json`: marketplace と manifest の JSON を検証します。
 - `rg 'references/' plugins .codex/skills`: skill から参照先への導線を spot check します。
 - `git status --short`: 変更対象の plugin、skill、manifest を確認します。
 

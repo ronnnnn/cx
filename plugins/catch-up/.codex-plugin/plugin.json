@@ -1,9 +1,9 @@
 {
   "name": "catch-up",
-  "description": "Codex plugin for technical research and version catch-up workflows.",
+  "description": "Codex 向けの技術調査とバージョン追従ワークフローを提供する plugin です。",
   "interface": {
     "displayName": "Catch-up",
-    "shortDescription": "Technical research and version catch-up guidance.",
+    "shortDescription": "技術調査とバージョン追従のガイダンスです。",
     "developerName": "ronnnnn",
     "category": "Productivity",
     "capabilities": ["Read", "Research"],
