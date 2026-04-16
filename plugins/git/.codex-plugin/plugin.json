@@ -30,7 +30,7 @@
       "/git:pr-review 123",
       "/git:pr-watch",
       "/git:pr-watch 123",
-      "/git:wt ~/projects/my-repo",
+      "/git:wt ./path/to/repo",
       "/git:japanese-text-style"
     ]
   }
