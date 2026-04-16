@@ -1,6 +1,8 @@
 {
   "name": "git",
+  "version": "1.0.0",
   "description": "commit、review、PR、CI、worktree を含む Codex 向け Git / GitHub plugin です。",
+  "skills": "./skills/",
   "interface": {
     "displayName": "Git",
     "shortDescription": "Codex 向けの Git / GitHub ワークフローです。",
@@ -8,6 +10,28 @@
     "category": "Productivity",
     "capabilities": ["Read", "Write"],
     "websiteUrl": "https://github.com/ronnnnn/cx",
-    "defaultPrompt": "git:review を使ってローカル差分をレビューして"
+    "defaultPrompt": [
+      "/git:commit",
+      "/git:review",
+      "/git:pr-create",
+      "/git:pr-update",
+      "/git:pr-update 123",
+      "/git:pr-fix",
+      "/git:pr-fix 123",
+      "/git:pr-ci",
+      "/git:pr-ci 123",
+      "/git:pr-status",
+      "/git:pr-status 123",
+      "/git:pr-status https://github.com/owner/repo/pull/123",
+      "/git:pr-explain",
+      "/git:pr-explain 123",
+      "/git:pr-explain https://github.com/owner/repo/pull/123",
+      "/git:pr-review",
+      "/git:pr-review 123",
+      "/git:pr-watch",
+      "/git:pr-watch 123",
+      "/git:wt ./path/to/repo",
+      "/git:japanese-text-style"
+    ]
   }
 }

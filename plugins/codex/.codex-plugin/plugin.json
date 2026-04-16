@@ -1,6 +1,8 @@
 {
   "name": "codex",
+  "version": "1.0.0",
   "description": "AGENTS.md と再利用可能な local skill を管理する Codex 向け plugin です。",
+  "skills": "./skills/",
   "interface": {
     "displayName": "Codex",
     "shortDescription": "AGENTS.md と Codex 向けの repo ルールを整備します。",
@@ -8,6 +10,12 @@
     "category": "Productivity",
     "capabilities": ["Read", "Write"],
     "websiteUrl": "https://github.com/ronnnnn/cx",
-    "defaultPrompt": "codex:init を使って AGENTS.md を整備して"
+    "defaultPrompt": [
+      "/codex:init",
+      "/codex:init ./packages/api",
+      "/codex:update",
+      "/codex:create-rules",
+      "/codex:create-rules https://github.com/owner/repo/pull/123"
+    ]
   }
 }
