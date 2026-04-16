@@ -1,6 +1,8 @@
 {
   "name": "dev",
+  "version": "1.0.0",
   "description": "コメント、計画、明示的な並列実行を支援する Codex 向け開発 plugin です。",
+  "skills": "./skills/",
   "interface": {
     "displayName": "Dev",
     "shortDescription": "コメント、計画、並列実行を Codex 向けに支援します。",
@@ -8,6 +10,11 @@
     "category": "Productivity",
     "capabilities": ["Read", "Write"],
     "websiteUrl": "https://github.com/ronnnnn/cx",
-    "defaultPrompt": "dev:plan を使って作業計画を作って"
+    "defaultPrompt": [
+      "/dev:do 1. lint を修正 2. テストを追加 3. README を更新",
+      "/dev:plan ./docs/design.md",
+      "/dev:plan https://github.com/owner/repo/pull/123",
+      "/dev:comment"
+    ]
   }
 }
