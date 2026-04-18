@@ -1,12 +1,11 @@
 pre-commit:
-  parallel: true
   commands:
     format:
       glob: '*.{md,yaml,yml,json,json5}'
       stage_fixed: true
       run: bun prettier --write {staged_files}
     zizmor:
-      glob: '{.github/workflows/*.{yml,yaml},action.{yml,yaml},**/action.{yml,yaml}}'
+      glob: '{.github/workflows/*.{yml,yaml},**/action.{yml,yaml}}'
       run: zizmor {staged_files}
 
 commit-msg:
