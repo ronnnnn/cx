@@ -3,8 +3,6 @@ name: Lint Commit Messages
 on:
   pull_request:
     types: [opened, synchronize]
-  merge_group:
-    types: [checks_requested]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -20,13 +18,12 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           fetch-depth: 100
+          persist-credentials: false
 
       - uses: ./.github/actions/setup-bun
 
-      - name: Validate PR commits with commitlint (pull_request)
-        if: ${{ github.event_name == 'pull_request' }}
-        run: bunx commitlint --from ${{ github.event.pull_request.base.sha }} --to ${{ github.event.pull_request.head.sha }} --verbose
-
-      - name: Validate PR commits with commitlint (merge_group)
-        if: ${{ github.event_name == 'merge_group' }}
-        run: bunx commitlint --from ${{ github.event.merge_group.base_sha }} --to ${{ github.event.merge_group.head_sha }} --verbose
+      - name: Validate PR commits with commitlint
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: bunx commitlint --from "$BASE_SHA" --to "$HEAD_SHA" --verbose
