@@ -1,4 +1,5 @@
 pre-commit:
+  parallel: true
   commands:
     format:
       glob: '*.{md,yaml,yml,json,json5}'
