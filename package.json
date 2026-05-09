@@ -9,8 +9,8 @@
     "sync:plugin-store": "node ./scripts/sync-plugin-store.mjs"
   },
   "devDependencies": {
-    "@commitlint/cli": "20.4.1",
-    "@commitlint/config-conventional": "20.4.1",
+    "@commitlint/cli": "20.5.3",
+    "@commitlint/config-conventional": "20.5.3",
     "lefthook": "2.1.6",
     "prettier": "3.8.1",
     "prettier-plugin-packagejson": "3.0.2"
