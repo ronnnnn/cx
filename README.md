@@ -4,17 +4,22 @@ Codex Marketplace & Plugins
 
 ## Plugins
 
-| Plugin       | Skills                                                                                                                                           | Description                    |
-| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------ |
-| **git**      | `commit`, `review`, `pr-create`, `pr-update`, `pr-fix`, `pr-ci`, `pr-status`, `pr-explain`, `pr-review`, `pr-watch`, `wt`, `japanese-text-style` | Git / GitHub ワークフロー      |
-| **codex**    | `init`, `update`, `create-rules`                                                                                                                 | AGENTS.md と repo ルールの整備 |
-| **dev**      | `do`, `plan`, `comment`                                                                                                                          | 並列実行、計画、コメント支援   |
-| **catch-up** | `tech-research`                                                                                                                                  | 技術調査とバージョン追従       |
+| Plugin       | Skills                                                                                                                                                      | Description                    |
+| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
+| **git**      | `commit`, `review`, `pr-auto`, `pr-create`, `pr-update`, `pr-fix`, `pr-ci`, `pr-status`, `pr-explain`, `pr-review`, `pr-watch`, `wt`, `japanese-text-style` | Git / GitHub ワークフロー      |
+| **codex**    | `init`, `update`, `create-rules`                                                                                                                            | AGENTS.md と repo ルールの整備 |
+| **dev**      | `do`, `plan`, `comment`                                                                                                                                     | 並列実行、計画、コメント支援   |
+| **catch-up** | `tech-research`                                                                                                                                             | 技術調査とバージョン追従       |
 
 ## Directory structure
 
 ```
 cx/
+├── .codex/
+│   ├── config.toml                    # Project-local skill 登録
+│   └── skills/
+│       └── <skill>/
+│           └── SKILL.md               # Repo 補助用 project-local skill
 ├── .agents/plugins/marketplace.json   # Marketplace 定義
 ├── plugins/
 │   └── <name>/
@@ -30,6 +35,12 @@ cx/
 │   └── sync-plugin-store.mjs
 └── package.json
 ```
+
+## Project-local Skills
+
+この repo 固有の補助 skill は `.codex/skills/` に置き、`.codex/config.toml` の `skills.config` で登録します。Codex は trusted project の `.codex/config.toml` を読み込みます。
+
+- `bump-version`: `plugins/<name>/.codex-plugin/plugin.json` の `version` を更新します。
 
 ## Setup
 

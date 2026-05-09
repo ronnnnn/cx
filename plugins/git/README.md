@@ -6,6 +6,7 @@ Codex 向けの Git / GitHub ワークフロー plugin です。
 
 - `git:commit`
 - `git:japanese-text-style`
+- `git:pr-auto`
 - `git:pr-ci`
 - `git:pr-create`
 - `git:pr-explain`

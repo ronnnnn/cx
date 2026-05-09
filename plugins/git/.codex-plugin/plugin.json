@@ -1,6 +1,6 @@
 {
   "name": "git",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "commit、review、PR、CI、worktree を含む Codex 向け Git / GitHub plugin です。",
   "skills": "./skills/",
   "interface": {
@@ -23,6 +23,8 @@
       "/git:pr-status",
       "/git:pr-status 123",
       "/git:pr-status https://github.com/owner/repo/pull/123",
+      "/git:pr-auto",
+      "/git:pr-auto --base main",
       "/git:pr-explain",
       "/git:pr-explain 123",
       "/git:pr-explain https://github.com/owner/repo/pull/123",
