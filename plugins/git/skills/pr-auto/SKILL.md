@@ -62,7 +62,7 @@ git log origin/<base>..HEAD --oneline
 - 未コミット変更の有無
 - 未プッシュコミットの有無
 - base branch との差分の有無
-- 既存 PR の有無 (`gh pr view --json number,state,isDraft,url`)
+- 既存 PR の有無 (`gh pr view --json number,state,isDraft,url 2>/dev/null`)。失敗した場合は PR なしとして扱い、新規 PR 作成へ進む
 
 base branch との差分がなく、未コミット変更もない場合は PR 作成不可として終了する。
 

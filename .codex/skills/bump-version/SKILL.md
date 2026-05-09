@@ -70,6 +70,7 @@ update_plan({
 ```bash
 git diff --cached --name-only
 git diff --name-only
+git ls-files --others --exclude-standard
 ```
 
 変更 path から対象 plugin を推測する:
@@ -91,6 +92,7 @@ version は変更内容から推測する:
 ```bash
 git diff --stat
 git diff -- plugins/<target>/
+git status --short -- plugins/<target>/
 ```
 
 推測だけで十分な根拠がある場合は確認せず実行する。判断に迷う場合のみ、候補と根拠を短く示してユーザーに確認する。
