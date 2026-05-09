@@ -39,6 +39,7 @@ update_plan({
   plan: [
     { step: "対象 plugin と version の特定", status: "pending" },
     { step: "現在 version の確認", status: "pending" },
+    { step: "marketplace の確認", status: "pending" },
     { step: "plugin manifest の更新", status: "pending" },
     { step: "整形と JSON 検証", status: "pending" },
     { step: "完了報告", status: "pending" },
@@ -104,9 +105,9 @@ jq -r '.version' plugins/<target>/.codex-plugin/plugin.json
 
 semver の増分:
 
-- major: `X.Y.Z` → `X+1.0.0`
-- minor: `X.Y.Z` → `X.Y+1.0`
-- patch: `X.Y.Z` → `X.Y.Z+1`
+- major: `X.Y.Z` → `(X+1).0.0`
+- minor: `X.Y.Z` → `X.(Y+1).0`
+- patch: `X.Y.Z` → `X.Y.(Z+1)`
 
 pre-release や build metadata が含まれる version は、指定 version がある場合のみ扱う。自動推測では通常の `X.Y.Z` に正規化する。
 

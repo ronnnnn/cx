@@ -50,7 +50,7 @@ update_plan({
 ```bash
 git status
 git branch --show-current
-git remote show origin | grep 'HEAD branch'
+gh repo view --json defaultBranchRef --jq '.defaultBranchRef.name'
 git log origin/<base>..HEAD --oneline
 ```
 
@@ -108,12 +108,14 @@ subject には実際の変更内容を具体的に記述し、「変更を反映
 
 ```bash
 git commit -m "$(cat <<'EOF'
-<type>(<scope>): <subject>
+<type>[(<scope>)]: <subject>
 
 <body>
 EOF
 )"
 ```
+
+`<scope>` は任意。scope がない場合は括弧を付けず、`<type>: <subject>` の形式にする。
 
 pre-commit hook が失敗した場合は、`--no-verify` でバイパスしない。失敗内容を確認し、修正可能なら修正して再度 `git add -A` と `git commit` を実行する。修正不可能な場合は中止する。
 
