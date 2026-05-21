@@ -102,7 +102,7 @@ JS で `lang` の値に応じて該当属性の値を要素の `textContent` に
 <button
   id="lang-toggle"
   class="icon-btn"
-  aria-label="Toggle language"
+  aria-label="言語切替"
   data-ja-aria-label="言語切替"
   data-en-aria-label="Toggle language"
 >

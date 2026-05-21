@@ -79,7 +79,7 @@ body {
 <button
   id="theme-toggle"
   class="icon-btn"
-  aria-label="Toggle theme"
+  aria-label="テーマ切替"
   data-ja-aria-label="テーマ切替"
   data-en-aria-label="Toggle theme"
 >
