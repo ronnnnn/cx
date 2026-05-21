@@ -1,11 +1,12 @@
 # Dev Plugin
 
-Codex での開発ワークフローを支援する plugin です。
+Codex での開発ワークフローと HTML ドキュメント生成を支援する plugin です。
 
 ## Skills
 
 - `dev:comment`
 - `dev:do`
+- `dev:docs-html`
 - `dev:plan`
 
 ## Notes
