@@ -7,12 +7,42 @@
 1. 初期言語は `localStorage.lang` を最優先、なければ `<html lang>` の初期値 (`ja`) を使用
 2. 言語状態は `<html lang="ja|en">` に保持する
 3. 切替ボタンを押すと `lang` を反転し `localStorage` に保存する
-4. テキストは **属性方式** で両言語を保持する (主流の方式)
-5. ボタン名・aria-label・タイトルも両言語化する
+4. `<head>` 内の初期化スクリプトで `lang` を先に設定し、保存済み言語と初期 HTML のずれによる FOUT を防ぐ
+5. プレーンテキストは **属性方式** で両言語を保持する (主流の方式)
+6. HTML markup を含む翻訳は **隣接要素方式** を使い、`data-ja` / `data-en` 属性には入れない
+7. ボタン名・aria-label・タイトルも両言語化する
+
+## 初期言語の先行設定
+
+`<head>` 内で `localStorage.lang` を読み、HTML の parse 中に `<html lang>` を更新する。JS が有効な場合だけ `js-i18n-pending` class を付け、body 末尾の i18n 初期化が完了するまで本文を隠す。これにより保存済み言語が `en` のときに日本語が一瞬表示される FOUT を防ぐ。
+
+```html
+<script>
+  (function () {
+    try {
+      var saved = localStorage.getItem('lang');
+      var lang = saved || document.documentElement.getAttribute('lang') || 'ja';
+      document.documentElement.setAttribute('lang', lang);
+      document.documentElement.classList.add('js-i18n-pending');
+    } catch (e) {}
+  })();
+</script>
+```
+
+```css
+html.js-i18n-pending body {
+  visibility: hidden;
+}
+
+[lang='ja'] [data-lang='en'],
+[lang='en'] [data-lang='ja'] {
+  display: none !important;
+}
+```
 
 ## テキスト保持方式: `data-ja` / `data-en` 属性
 
-JS で `lang` の値に応じて該当属性の値を要素の `textContent` に流し込む。
+JS で `lang` の値に応じて該当属性の値を要素の `textContent` に流し込む。`textContent` を使うため、属性値はプレーンテキスト専用とする。
 
 ```html
 <h1 data-ja="使い方ガイド" data-en="How to use"></h1>
@@ -23,14 +53,14 @@ JS で `lang` の値に応じて該当属性の値を要素の `textContent` に
 <button data-ja="コピー" data-en="Copy">コピー</button>
 ```
 
-属性内に HTML タグが必要な場合は属性ではなく **隣接要素方式** を使う:
+属性内に HTML タグが必要な場合は属性ではなく **隣接要素方式** を使う。初期表示は CSS の `[lang] [data-lang]` ルールに任せるため、初期 HTML に `hidden` 属性は付けない:
 
 ```html
 <div class="i18n">
   <div data-lang="ja">
     <p>これは <strong>重要な</strong> 注釈です。</p>
   </div>
-  <div data-lang="en" hidden>
+  <div data-lang="en">
     <p>This is an <strong>important</strong> note.</p>
   </div>
 </div>
@@ -108,6 +138,7 @@ JS で `lang` の値に応じて該当属性の値を要素の `textContent` に
     document.querySelectorAll('[data-lang]').forEach((el) => {
       el.hidden = el.getAttribute('data-lang') !== lang;
     });
+    document.documentElement.classList.remove('js-i18n-pending');
   }
 
   function initLang() {
@@ -141,6 +172,7 @@ JS で `lang` の値に応じて該当属性の値を要素の `textContent` に
 - **日付フォーマット** は両言語で揃える (`2026-05-21` または ISO 8601)
 - **見出しは簡潔に** - 機械翻訳的にならず、両言語ネイティブとして自然な表現にする
 - **コードコメント** は原則翻訳しない (元のコードと同じ)。説明として翻訳が必要な場合は `<aside>` で注釈
+- **HTML markup を属性に入れない** - `<em>` や `<code>` を含む翻訳は `data-lang` の隣接要素方式で表現する
 - **量の不一致に注意** - 英語の方が短くなりがちなので、レイアウトが崩れないか確認
 
 ## チェックリスト

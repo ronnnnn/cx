@@ -96,8 +96,9 @@ update_plan({
 **すべてのテキストノードを日/英 両方準備する**。手順:
 
 1. 元コンテンツが片言語のみの場合、もう片方を翻訳して用意する (技術用語と固有名詞は原語維持)
-2. テキストは `data-ja` / `data-en` 属性で両言語を保持する
-3. 細かい注釈、図のラベル、ボタン名も漏れなく対象にする
+2. プレーンテキストは `data-ja` / `data-en` 属性で両言語を保持する
+3. `<em>`、`<code>`、`<strong>` などのインライン HTML を含む翻訳は `data-ja` / `data-en` に入れず、`data-lang` を使った隣接要素方式で両言語の markup を分ける
+4. 細かい注釈、図のラベル、ボタン名も漏れなく対象にする
 
 実装の詳細は `references/i18n-toggle.md` を厳守する。
 
@@ -112,6 +113,7 @@ update_plan({
 - `<title>` (日本語タイトル、言語切替時に英語に変える)
 - CSS 変数による色管理 (light/dark の両セットを `:root` と `[data-theme="dark"]` に定義)
 - `prefers-color-scheme` での初期値判定と `localStorage` での状態保持
+- `localStorage.lang` に基づく `<head>` 内での初期 `lang` 設定と、初回描画時の FOUT 防止
 - 言語/テーマ切替ボタンを右上に固定配置 (モバイルでもタップ可)
 - レスポンシブ設計 (max-width 1100px 程度のコンテンツ幅、モバイル時はパディング縮小)
 
@@ -131,11 +133,11 @@ update_plan({
 生成後、以下を必ず shell でチェックする:
 
 ```bash
-grep -cE 'data-theme=["'\"'\"']dark["'\"'\"']' <出力ファイル>
-grep -cE 'data-(lang|ja|en)' <出力ファイル>
-grep -c 'localStorage' <出力ファイル>
-grep -c 'viewport' <出力ファイル>
-grep -c 'aria-' <出力ファイル>
+rg -c "data-theme=.*dark" <出力ファイル>
+rg -c "data-(lang|ja|en)" <出力ファイル>
+rg -c "localStorage" <出力ファイル>
+rg -c "viewport" <出力ファイル>
+rg -c "aria-" <出力ファイル>
 ```
 
 検証項目:
