@@ -4,12 +4,12 @@ Codex Marketplace & Plugins
 
 ## Plugins
 
-| Plugin       | Skills                                                                                                                                                      | Description                    |
-| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
-| **git**      | `commit`, `review`, `pr-auto`, `pr-create`, `pr-update`, `pr-fix`, `pr-ci`, `pr-status`, `pr-explain`, `pr-review`, `pr-watch`, `wt`, `japanese-text-style` | Git / GitHub ワークフロー      |
-| **codex**    | `init`, `update`, `create-rules`                                                                                                                            | AGENTS.md と repo ルールの整備 |
-| **dev**      | `do`, `plan`, `comment`                                                                                                                                     | 並列実行、計画、コメント支援   |
-| **catch-up** | `tech-research`                                                                                                                                             | 技術調査とバージョン追従       |
+| Plugin       | Skills                                                                                                                                                      | Description                                     |
+| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
+| **git**      | `commit`, `review`, `pr-auto`, `pr-create`, `pr-update`, `pr-fix`, `pr-ci`, `pr-status`, `pr-explain`, `pr-review`, `pr-watch`, `wt`, `japanese-text-style` | Git / GitHub ワークフロー                       |
+| **codex**    | `init`, `update`, `create-rules`                                                                                                                            | AGENTS.md と repo ルールの整備                  |
+| **dev**      | `do`, `plan`, `comment`, `docs-html`                                                                                                                        | 並列実行、計画、コメント、HTML ドキュメント生成 |
+| **catch-up** | `tech-research`                                                                                                                                             | 技術調査とバージョン追従                        |
 
 ## Directory structure
 
