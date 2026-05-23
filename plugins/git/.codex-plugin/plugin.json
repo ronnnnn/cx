@@ -1,7 +1,7 @@
 {
   "name": "git",
-  "version": "1.1.0",
-  "description": "commit、review、PR、CI、worktree を含む Codex 向け Git / GitHub plugin です。",
+  "version": "1.2.0",
+  "description": "commit、PR、CI、worktree を含む Codex 向け Git / GitHub plugin です。",
   "skills": "./skills/",
   "interface": {
     "displayName": "Git",
@@ -12,7 +12,6 @@
     "websiteUrl": "https://github.com/ronnnnn/cx",
     "defaultPrompt": [
       "/git:commit",
-      "/git:review",
       "/git:pr-create",
       "/git:pr-update",
       "/git:pr-update 123",
