@@ -40,6 +40,7 @@ update_plan({
     { step: "フィードバックを取得して指摘単位に分割", status: "pending" },
     { step: "現在のコンテキストと差分を収集", status: "pending" },
     { step: "各指摘の妥当性・スコープ・方針整合性を判定", status: "pending" },
+    { step: "不明瞭な箇所を確認", status: "pending" },
     { step: "修正対象の指摘を反映", status: "pending" },
     { step: "検証して判定結果を報告", status: "pending" }
   ]
@@ -98,7 +99,7 @@ else
 fi
 ```
 
-`git diff "$base"` は分岐点から作業ツリーまでの全変更 (コミット済み + 未コミット) を含む。指摘がブランチでの作業全体に対するものか、未コミット分のみかを区別したい場合は `git diff "$base" HEAD` も併用する。
+`git diff "$base"` は分岐点から作業ツリーまでの全変更 (コミット済み + 未コミット) を含む。指摘がブランチでの作業全体に対するものか、コミット済みの変更のみかを区別したい場合は `git diff "$base" HEAD` を、未コミット分のみを確認したい場合は `git diff HEAD` も併用する。
 
 差分が空の場合でも、セッションのコンテキストを基準に検証を続ける。
 
@@ -144,7 +145,7 @@ fi
 | 4      | context7 MCP | ライブラリの公式ドキュメントとコード例 |
 | 5      | WebSearch    | 最新情報・公式サイト・GitHub           |
 
-MCP や追加 tool がまだ有効化されていない場合は、`tool_search` で必要な tool を探してから使う。OpenAI、Terraform、Google Cloud など専用 MCP がある領域は、それぞれの専用 tool / skill を優先する。
+MCP や追加 tool がまだ有効化されていない場合は、現在の Codex セッションで利用可能な tool discovery 手段を確認してから使う。OpenAI、Terraform、Google Cloud など専用 MCP がある領域は、それぞれの専用 tool / skill を優先する。
 
 ### 4. 不明瞭な場合の確認
 
