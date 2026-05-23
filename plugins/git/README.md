@@ -15,10 +15,10 @@ Codex 向けの Git / GitHub ワークフロー plugin です。
 - `git:pr-status`
 - `git:pr-update`
 - `git:pr-watch`
-- `git:review`
 - `git:wt`
 
 ## Notes
 
-- review、PR、CI、worktree などの Git / GitHub workflow を skill ごとに分けています。
+- PR、CI、worktree などの Git / GitHub workflow を skill ごとに分けています。
+- ローカル変更レビューは `dev:review` に移設しています。
 - コミットや push は、repo の `AGENTS.md` で確認必須にされている場合、その境界を優先します。
