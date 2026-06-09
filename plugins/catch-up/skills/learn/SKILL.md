@@ -55,7 +55,7 @@ Goal objective の例:
 
 ## Checklist
 
-作業開始時に、理解確認用の Markdown checklist を作る。repo や workspace で作業している場合は、ユーザーの作業対象に近い一時的な Markdown file を使う。ファイル作成が不適切な会話では、会話内で同じ形式の checklist を維持する。
+作業開始時に、理解確認用の Markdown checklist を作る。Write capability が利用可能で、repo や workspace で作業している場合は、ユーザーの作業対象に近い一時的な Markdown file を使う。ファイル作成が不適切な会話や書き込み不可環境では、会話内で同じ形式の checklist を維持する。
 
 Checklist には最低限、次を含める:
 
@@ -72,6 +72,7 @@ Checklist には最低限、次を含める:
 
 - [ ] 何を変更したか
 - [ ] なぜその解決策を選んだか
+- [ ] どの設計判断や invariant を守るべきか
 - [ ] 代替案と trade-off
 - [ ] edge case
 
