@@ -16,6 +16,22 @@ description: |
 - ユーザーが `ELI5`、`ELI14`、`intern 向け` などの粒度を指定したら、その粒度に合わせる。
 - 理解確認は open-ended question を基本にし、必要に応じて multiple choice question を混ぜる。
 
+## 作業開始前の準備
+
+作業開始時に `update_plan` が利用可能なら、理解確認の進行状況を管理するために以下の step を登録する。各 step の開始時に `in_progress`、完了時に `completed` へ更新する。
+
+```text
+update_plan({
+  plan: [
+    { step: "現在地の確認", status: "pending" },
+    { step: "問題の理解確認", status: "pending" },
+    { step: "解決策の理解確認", status: "pending" },
+    { step: "影響範囲の理解確認", status: "pending" },
+    { step: "Quiz による最終確認", status: "pending" }
+  ]
+})
+```
+
 ## Goal Loop
 
 作業開始時に、利用可能なら `/goal` または goal tracking tool で「ユーザーが対象内容を説明できるまで理解確認を続ける」目的を作成する。
