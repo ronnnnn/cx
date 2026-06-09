@@ -1,0 +1,4 @@
+interface:
+  display_name: 'Learn'
+  short_description: '作業内容を段階的に説明し理解確認と quiz まで伴走します。'
+  default_prompt: 'Use $learn (/catch-up:learn) to explain a recent implementation and verify my understanding step by step.'

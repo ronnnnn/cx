@@ -1,17 +1,18 @@
 {
   "name": "catch-up",
-  "version": "1.0.0",
-  "description": "Codex 向けの技術調査とバージョン追従ワークフローを提供する plugin です。",
+  "version": "1.1.0",
+  "description": "Codex 向けの技術調査、理解支援、バージョン追従ワークフローを提供する plugin です。",
   "skills": "./skills/",
   "interface": {
     "displayName": "Catch-up",
-    "shortDescription": "技術調査とバージョン追従のガイダンスです。",
+    "shortDescription": "技術調査と理解支援のガイダンスです。",
     "developerName": "ronnnnn",
     "category": "Productivity",
     "capabilities": ["Read", "Research"],
     "websiteUrl": "https://github.com/ronnnnn/cx",
     "defaultPrompt": [
-      "/catch-up:tech-research React 19 の最新機能と変更点を調べて"
+      "/catch-up:tech-research React 19 の最新機能と変更点を調べて",
+      "/catch-up:learn この修正内容を理解確認しながら教えて"
     ]
   }
 }
