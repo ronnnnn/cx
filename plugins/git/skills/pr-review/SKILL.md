@@ -1,6 +1,6 @@
 ---
 name: pr-review
-description: PR をレビューし、指摘箇所にコメントを投稿する。複数 AI (Claude/Codex/Gemini) で並列レビューし、結果を統合。
+description: PR をレビューし、指摘箇所にコメントを投稿する。複数 AI (Claude/Codex/Antigravity) で並列レビューし、結果を統合。
 ---
 
 # PR レビューワークフロー
@@ -9,7 +9,7 @@ PR の変更を複数の AI でレビューし、指摘箇所に PR コメント
 
 ## 重要な原則
 
-1. **複数の視点で並列レビューする** - メインセッション、Gemini、必要時の追加 reviewer を併用する
+1. **複数の視点で並列レビューする** - メインセッション、Antigravity、必要時の追加 reviewer を併用する
 2. **結果を統合・重複排除する** - 同じ指摘は 1 つにマージ
 3. **有用な指摘のみコメントする** - メインセッションが最終判断
 4. **インラインコメントを優先する** - ファイル・行番号が明確な場合
@@ -111,7 +111,7 @@ gh pr view <number> --json additions,deletions --jq '.additions + .deletions'
 
 - ユーザーが明示的に delegation / sub-agents / parallel agents を求めていない場合は、メインセッションでレビューを完結する。
 - `spawn_agent` を使う場合も、自動修正はメインセッションのみが実行する。
-- Gemini MCP が使える場合は、メインセッションのレビューと並列に実行してよい。
+- Antigravity MCP が使える場合は、メインセッションのレビューと並列に実行してよい。
 
 ```
 spawn_agent({  description: "PR の並列レビュー",
@@ -130,7 +130,7 @@ gh pr diff <number> --name-only
 
 利用可能なレビュー手段を決める:
 - メインセッションによるレビュー
-- 利用可能なら `mcp__gemini__ask-gemini`
+- 利用可能なら `mcp__antigravity__ask-antigravity`
 - 必要なら追加の `spawn_agent`
 
 ### 3. 並列レビューの実行
@@ -144,8 +144,8 @@ gh pr diff <number> --name-only
 - 可読性: 命名、複雑度、コメント
 - テスト: カバレッジ、エッジケース
 
-**Gemini MCP レビュー (利用可能時):**
-- `mcp__gemini__ask-gemini` を `prompt: "/code-review <PR の URL>"` で呼び出す
+**Antigravity MCP レビュー (利用可能時):**
+- `mcp__antigravity__ask-antigravity` を `prompt: "/code-review <PR の URL>"` で呼び出す
 
 **追加 agent レビュー (必要時):**
 - セキュリティやロジックなど、観点を分ける価値がある場合だけ `spawn_agent` で reviewer を追加する
@@ -168,7 +168,7 @@ gh pr diff <number> --name-only
 - MEDIUM: パフォーマンス問題、可読性 (検討推奨)
 - LOW: スタイル、軽微な改善 (任意)
 
-**Gemini 出力の severity マッピング:**
+**Antigravity 出力の severity マッピング:**
 - critical, severe, security → CRITICAL
 - bug, error, high → HIGH
 - warning, medium → MEDIUM
@@ -179,14 +179,14 @@ gh pr diff <number> --name-only
 \`\`\`markdown
 ## Aggregated Review Results
 
-**Reviewed by:** メインセッション, Gemini, 追加 reviewer (利用したもののみ記載)
+**Reviewed by:** メインセッション, Antigravity, 追加 reviewer (利用したもののみ記載)
 **Total Issues:** N
 
 ### Critical Issues (X)
 1. **[CRITICAL]** [file:line] - 説明
    - 問題: ...
    - 推奨: ...
-   - 検出元: メインセッション, Gemini
+   - 検出元: メインセッション, Antigravity
 
 ### High Priority Issues (Y)
 ...
@@ -197,15 +197,15 @@ gh pr diff <number> --name-only
 \`\`\`
 
 ## 注意事項
-- Gemini や追加 reviewer が利用できない場合はメインセッション単独でレビューを実行する
+- Antigravity や追加 reviewer が利用できない場合はメインセッション単独でレビューを実行する
 - スタイルのみの指摘 (linter で対応すべき)、好みの問題、曖昧な指摘は除外する
-- 検出元 (メインセッション / Gemini / 追加 reviewer) を各指摘に付記する`
+- 検出元 (メインセッション / Antigravity / 追加 reviewer) を各指摘に付記する`
 })
 ```
 
 agent が以下を自動で実行する:
 
-- Gemini や追加 reviewer の利用可否確認
+- Antigravity や追加 reviewer の利用可否確認
 - メインセッション自身のレビュー + 利用可能なレビュー手段への並列依頼
 - 結果の統合・重複排除・severity 統一
 
@@ -357,20 +357,20 @@ gh pr diff <number>
 })
 ```
 
-**gemini-reviewer:**
+**antigravity-reviewer:**
 
 ```
 spawn_agent({
-  description: "Gemini MCP レビュー",
-  prompt: `あなたは gemini-reviewer です。Gemini MCP を使って PR #<number> をレビューしてください。
+  description: "Antigravity MCP レビュー",
+  prompt: `あなたは antigravity-reviewer です。Antigravity MCP を使って PR #<number> をレビューしてください。
 
 ## 手順
 
-### 1. Gemini MCP の実行
-\`mcp__gemini__ask-gemini\` を \`prompt: \"/code-review <PR の URL>\"\` で呼び出す。
+### 1. Antigravity MCP の実行
+\`mcp__antigravity__ask-antigravity\` を \`prompt: \"/code-review <PR の URL>\"\` で呼び出す。
 
 ### 2. 結果の送信
-Gemini の出力を severity をそろえた上で返す:
+Antigravity の出力を severity をそろえた上で返す:
 - critical, severe, security → CRITICAL
 - bug, error, high → HIGH
 - warning, medium → MEDIUM
@@ -392,7 +392,7 @@ Gemini の出力を severity をそろえた上で返す:
 1. ファイルパスと行番号で指摘をグループ化
 2. 同じ問題への指摘は最も詳細な説明を採用
 3. severity は最も高いものを採用
-4. 検出元 (security-reviewer, logic-reviewer, bestpractice-reviewer, Gemini) を付記
+4. 検出元 (security-reviewer, logic-reviewer, bestpractice-reviewer, Antigravity) を付記
 
 **severity 統一:**
 
@@ -456,7 +456,7 @@ Gemini の出力を severity をそろえた上で返す:
 ## PR レビュー結果
 
 **PR:** #<number> - <title>
-**レビュー AI:** メインセッション, Gemini (または security-reviewer, logic-reviewer, bestpractice-reviewer, Codex, Gemini)
+**レビュー AI:** メインセッション, Antigravity (または security-reviewer, logic-reviewer, bestpractice-reviewer, Codex, Antigravity)
 
 ### 投稿予定のコメント (N 件)
 
@@ -510,7 +510,7 @@ gh pr comment <number> --body "コメント内容"
 
 - **PR:** #<number> - <title>
 - **レビュー方式:** 単一 agent / 複数 agent
-- **レビュー AI:** メインセッション, Gemini
+- **レビュー AI:** メインセッション, Antigravity
 - **投稿コメント数:** N 件
   - インラインコメント: X 件
   - 一般コメント: Y 件

@@ -77,26 +77,26 @@ mcp__deepwiki__ask_question:
 | Terraform  | hashicorp/terraform  |
 | Docker     | moby/moby            |
 
-## Gemini MCP (優先度 3)
+## Antigravity MCP (優先度 3)
 
 ### 対象ユースケース
 
-- Google 検索グラウンディングで最新の Web 情報を取得したい
+- 最新の Web 情報や外部知見を取得したい
 - リリース情報、公式発表を確認したい
 - 最新のベストプラクティスやトレンドを知りたい
 
 ### 使い方
 
 ```
-# Gemini MCP を直接使用
-利用可否確認: select:mcp__gemini__ask-gemini
+# Antigravity MCP を直接使用
+利用可否確認: select:mcp__antigravity__ask-antigravity
 
-# google_web_search ツールの使用を指示
-mcp__gemini__ask-gemini:
-  prompt: "google_web_search ツールを使って <検索対象> の最新情報を調べてください"
+# 調査対象と優先ソースを明示
+mcp__antigravity__ask-antigravity:
+  prompt: "<検索対象> の最新情報を調べ、公式ソースを優先して根拠付きで要約してください"
 ```
 
-**重要**: プロンプトには必ず `google_web_search` ツールを使うよう指示を含める。
+**重要**: プロンプトには調査対象、必要な鮮度、優先したいソース種別を含める。
 
 ## context7 MCP (優先度 4)
 

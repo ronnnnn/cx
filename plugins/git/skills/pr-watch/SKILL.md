@@ -168,7 +168,7 @@ gh run list --commit "$HEAD_SHA" --json databaseId,status,conclusion,name --limi
 | ------ | -------------------- | ---------------------------------------- |
 | 1      | LSP                  | コードベース内の定義・参照・型情報の確認 |
 | 2      | deepwiki MCP         | OSS リポジトリの Wiki・ドキュメント      |
-| 3      | Gemini MCP           | Google 検索による最新情報の取得          |
+| 3      | Antigravity MCP      | 最新情報や外部知見の取得                 |
 | 4      | context7 MCP         | ライブラリの公式ドキュメントとコード例   |
 | 5      | 必要時のみ WebFetch  | 公式サイト・GitHub・特定 URL の確認      |
 | 6      | 必要時のみ WebSearch | 最新情報・ブログ・リリースノートの検索   |

@@ -20,7 +20,7 @@ description: |
 | ------ | -------------------- | ------------------------------------------ | -------------------------------------------------------------------------------------------------------- |
 | 1      | ローカルコード調査   | コードベース内の定義・参照・呼び出しの調査 | `Grep`, `Read`, `Glob`                                                                                   |
 | 2      | deepwiki MCP         | OSS リポジトリの Wiki・ドキュメント        | `mcp__deepwiki__read_wiki_structure`, `mcp__deepwiki__read_wiki_contents`, `mcp__deepwiki__ask_question` |
-| 3      | Gemini MCP           | Google 検索による最新情報の取得            | `mcp__gemini__ask-gemini`                                                                                |
+| 3      | Antigravity MCP      | 最新情報や外部知見の取得                   | `mcp__antigravity__ask-antigravity`                                                                      |
 | 4      | context7 MCP         | ライブラリの公式ドキュメントとコード例     | `mcp__context7__resolve-library-id`, `mcp__context7__query-docs`                                         |
 | 5      | 必要時のみ WebFetch  | 公式サイト・GitHub・特定 URL の取得        | 必要時のみ WebFetch                                                                                      |
 | 6      | 必要時のみ WebSearch | 最新情報・ブログ・リリースノートの検索     | 必要時のみ WebSearch                                                                                     |
@@ -55,7 +55,7 @@ update_plan({
 
 - **コードベース内の調査**: 関数の定義、参照元、呼び出し関係 → `Grep` / `Read` / `Glob` を使用
 - **OSS ライブラリの仕組み**: 内部実装、アーキテクチャ → deepwiki MCP を使用
-- **Google 検索による最新情報**: リリース情報、公式発表 → Gemini MCP を使用
+- **最新情報や外部知見**: リリース情報、公式発表、周辺調査 → Antigravity MCP を使用
 - **ライブラリの使い方**: API、設定方法、コード例 → context7 MCP を使用
 - **特定ページの情報**: 公式ドキュメント、GitHub Issues → 必要時のみ WebFetch を使用
 - **最新情報・トレンド**: リリース情報、ベストプラクティス → 必要時のみ WebSearch を使用
@@ -91,26 +91,26 @@ OSS リポジトリの内部ドキュメントを調査する。
 
 リポジトリの指定形式: `owner/repo` (例: `facebook/react`, `vercel/next.js`)
 
-#### Gemini MCP (優先度 3)
+#### Antigravity MCP (優先度 3)
 
-Google 検索グラウンディングで最新の Web 情報を取得する。
-
-```
-1. Gemini MCP を直接使用
-2. mcp__gemini__ask-gemini: プロンプトに google_web_search ツールの使用を指示
-```
-
-**重要**: プロンプトには必ず `google_web_search` ツールを使うよう指示を含める。
+最新の Web 情報や外部知見を取得する。
 
 ```
-mcp__gemini__ask-gemini:
-  prompt: "google_web_search ツールを使って <検索対象> の最新情報を調べてください"
+1. Antigravity MCP を直接使用
+2. mcp__antigravity__ask-antigravity: プロンプトで調査対象と必要な観点を明示する
+```
+
+**重要**: プロンプトには調査対象、必要な鮮度、優先したいソース種別を含める。
+
+```
+mcp__antigravity__ask-antigravity:
+  prompt: "<検索対象> の最新情報を調べ、公式ソースを優先して根拠付きで要約してください"
 ```
 
 例:
 
-- `"google_web_search ツールを使って React 19 の最新リリース情報を調べてください"`
-- `"google_web_search ツールを使って Next.js 15 の新機能を調べてください"`
+- `"React 19 の最新リリース情報を公式ソース優先で調べてください"`
+- `"Next.js 15 の新機能を公式ドキュメントとリリースノート優先で調べてください"`
 
 主な用途:
 
@@ -185,7 +185,7 @@ mcp__gemini__ask-gemini:
 調査対象は何か？
 ├── コードベース内の定義・参照 → ローカルコード調査 (`Grep` / `Read` / `Glob`)
 ├── OSS の内部実装・アーキテクチャ → deepwiki MCP
-├── Google 検索で最新情報取得 → Gemini MCP
+├── 最新情報や外部知見の取得 → Antigravity MCP
 ├── ライブラリの使い方・API → context7 MCP
 ├── 特定 URL のコンテンツ → 必要時のみ WebFetch
 └── 最新情報・トレンド → 必要時のみ WebSearch
