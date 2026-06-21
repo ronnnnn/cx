@@ -9,7 +9,7 @@ description: ローカルの変更 (staged/unstaged) をレビューし、指摘
 
 ## 重要な原則
 
-1. **複数の視点で並列レビューする** - メインセッション、Gemini、必要時の追加 reviewer を併用する
+1. **複数の視点で並列レビューする** - メインセッション、Antigravity、必要時の追加 reviewer を併用する
 2. **結果を統合・重複排除する** - 同じ指摘は 1 つにマージ
 3. **修正が必要なものは承認なしで自動修正する**
 4. **レビュー・修正を繰り返す** - 修正がなくなるまで
@@ -109,7 +109,7 @@ git diff HEAD --stat | tail -1
 
 - ユーザーが明示的に delegation / sub-agents / parallel agents を求めていない場合は、メインセッションでレビューを完結する。
 - `spawn_agent` を使う場合も、自動修正はメインセッションのみが実行する。
-- Gemini MCP が使える場合は、メインセッションのレビューと並列に実行してよい。
+- Antigravity MCP が使える場合は、メインセッションのレビューと並列に実行してよい。
 
 ```
 spawn_agent({
@@ -129,7 +129,7 @@ git diff HEAD --name-only
 
 利用可能なレビュー手段を決める:
 - メインセッションによるレビュー
-- 利用可能なら `mcp__gemini__ask-gemini`
+- 利用可能なら `mcp__antigravity__ask-antigravity`
 - 必要なら追加の `spawn_agent`
 
 ### 3. 並列レビューの実行
@@ -145,8 +145,8 @@ git diff HEAD --name-only
 - 可読性: 命名、複雑度、コメント
 - テスト: カバレッジ、エッジケース
 
-**Gemini MCP レビュー (利用可能時):**
-- `mcp__gemini__ask-gemini` を `prompt: "/code-review <対象ディレクトリの絶対パス>"` で呼び出す
+**Antigravity MCP レビュー (利用可能時):**
+- `mcp__antigravity__ask-antigravity` を `prompt: "/code-review <対象ディレクトリの絶対パス>"` で呼び出す
 
 **追加 agent レビュー (必要時):**
 - セキュリティやロジックなど、観点を分ける価値がある場合だけ `spawn_agent` で reviewer を追加する
@@ -175,14 +175,14 @@ git diff HEAD --name-only
 \`\`\`markdown
 ## Aggregated Review Results
 
-**Reviewed by:** メインセッション, Gemini, 追加 reviewer (利用したもののみ記載)
+**Reviewed by:** メインセッション, Antigravity, 追加 reviewer (利用したもののみ記載)
 **Total Issues:** N
 
 ### Critical Issues (X)
 1. **[CRITICAL]** [file:line] - 説明
    - 問題: ...
    - 推奨: ...
-   - 検出元: メインセッション, Gemini
+   - 検出元: メインセッション, Antigravity
 
 ### High Priority Issues (Y)
 ...
@@ -193,15 +193,16 @@ git diff HEAD --name-only
 \`\`\`
 
 ## 注意事項
-- Gemini や追加 reviewer が利用できない場合はメインセッション単独でレビューを実行する
+- Antigravity や追加 reviewer が利用できない場合はメインセッション単独でレビューを実行する
 - スタイルのみの指摘 (linter で対応すべき)、好みの問題、曖昧な指摘は除外する
-- 検出元 (メインセッション / Gemini / 追加 reviewer) を各指摘に付記する`
+- 検出元 (メインセッション / Antigravity / 追加 reviewer) を各指摘に付記する
+`
 })
 ```
 
 agent が以下を自動で実行する:
 
-- Gemini や追加 reviewer の利用可否確認
+- Antigravity や追加 reviewer の利用可否確認
 - メインセッション自身のレビュー + 利用可能なレビュー手段への並列依頼
 - 結果の統合・重複排除・severity 統一
 
@@ -356,25 +357,25 @@ git diff HEAD
 })
 ```
 
-**gemini-reviewer:**
+**antigravity-reviewer:**
 
 ```
 spawn_agent({
-  description: "Gemini MCP レビュー",
-  prompt: `あなたは gemini-reviewer です。Gemini MCP を使ってローカルの変更差分をレビューしてください。
+  description: "Antigravity MCP レビュー",
+  prompt: `あなたは antigravity-reviewer です。Antigravity MCP を使ってローカルの変更差分をレビューしてください。
 
 ## 手順
 
-### 1. Gemini MCP の利用可能性確認
-利用可否を確認: \`select:mcp__gemini__ask-gemini\`
+### 1. Antigravity MCP の利用可能性確認
+利用可否を確認: \`select:mcp__antigravity__ask-antigravity\`
 
-Gemini MCP が利用できない場合は、その旨を明記して結果なしで完了する。
+Antigravity MCP が利用できない場合は、その旨を明記して結果なしで完了する。
 
-### 2. Gemini MCP でレビュー
-\`mcp__gemini__ask-gemini\` を \`prompt: "/code-review <対象ディレクトリの絶対パス>"\` で呼び出す。
+### 2. Antigravity MCP でレビュー
+\`mcp__antigravity__ask-antigravity\` を \`prompt: "/code-review <対象ディレクトリの絶対パス>"\` で呼び出す。
 
 ### 3. 結果の送信
-Gemini の出力を severity をそろえた上で返す:
+Antigravity の出力を severity をそろえた上で返す:
 - critical, severe, security → CRITICAL
 - bug, error, high → HIGH
 - warning, medium → MEDIUM
@@ -396,7 +397,7 @@ Gemini の出力を severity をそろえた上で返す:
 1. ファイルパスと行番号で指摘をグループ化
 2. 同じ問題への指摘は最も詳細な説明を採用
 3. severity は最も高いものを採用
-4. 検出元 (security-reviewer, logic-reviewer, bestpractice-reviewer, Gemini) を付記
+4. 検出元 (security-reviewer, logic-reviewer, bestpractice-reviewer, Antigravity) を付記
 
 **severity 統一:**
 
@@ -482,7 +483,7 @@ git diff HEAD
 ## ローカルレビュー完了
 
 **レビュー方式:** 単一 agent / 複数 agent
-**レビュー AI:** メインセッション, Gemini
+**レビュー AI:** メインセッション, Antigravity
 **レビュー回数:** N 回
 
 ### 修正サマリ

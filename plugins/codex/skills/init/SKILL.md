@@ -98,9 +98,9 @@ ls -la AGENTS.md 2>/dev/null
 
 ## 技術調査
 
-優先順位: deepwiki MCP → Gemini MCP → context7 MCP → 必要時のみ WebSearch
+優先順位: deepwiki MCP → Antigravity MCP → context7 MCP → 必要時のみ WebSearch
 
-※ Gemini MCP は mcp__gemini__ask-gemini で google_web_search を使用
+※ Antigravity MCP は mcp__antigravity__ask-antigravity を使用
 ```
 
 ### 6. 最適化

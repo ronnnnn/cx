@@ -32,7 +32,7 @@
 
 ## 技術調査
 
-優先順位は `deepwiki MCP` → `Gemini MCP` → `context7 MCP` → `WebSearch` です。ローカルの repo 状態で判定できる事項は、外部調査より先に `Grep`、`Read`、`Glob` で確認します。Gemini を使うときは、必要に応じて `mcp__gemini__ask-gemini` で `google_web_search` を併用します。
+優先順位は `deepwiki MCP` → `Antigravity MCP` → `context7 MCP` → `WebSearch` です。ローカルの repo 状態で判定できる事項は、外部調査より先に `Grep`、`Read`、`Glob` で確認します。Antigravity を使うときは `mcp__antigravity__ask-antigravity` を使用します。
 
 ## コーディング規約と命名
 
