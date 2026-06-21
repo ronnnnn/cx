@@ -366,17 +366,22 @@ spawn_agent({
 
 ## 手順
 
-### 1. Antigravity MCP の実行
+### 1. Antigravity MCP の利用可能性確認
+利用可否を確認: \`select:mcp__antigravity__ask-antigravity\`
+
+Antigravity MCP が利用できない場合は、その旨を明記して結果なしで完了する。
+
+### 2. Antigravity MCP でレビュー
 \`mcp__antigravity__ask-antigravity\` を \`prompt: \"/code-review <PR の URL>\"\` で呼び出す。
 
-### 2. 結果の送信
+### 3. 結果の送信
 Antigravity の出力を severity をそろえた上で返す:
 - critical, severe, security → CRITICAL
 - bug, error, high → HIGH
 - warning, medium → MEDIUM
 - info, suggestion, nit → LOW
 
-### 3. タスク完了
+### 4. タスク完了
 変更したファイルと結果を明記して完了する。`
 })
 ```
