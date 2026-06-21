@@ -115,7 +115,7 @@ gh pr view <number> --json additions,deletions --jq '.additions + .deletions'
 
 ```
 spawn_agent({  description: "PR の並列レビュー",
-  prompt: """あなたは code-reviewer です。PR #<number> の差分を複数 AI で並列レビューし、結果を統合してください。PR URL: <url>
+  prompt: `あなたは code-reviewer です。PR #<number> の差分を複数 AI で並列レビューし、結果を統合してください。PR URL: <url>
 
 ## 手順
 
@@ -199,7 +199,8 @@ gh pr diff <number> --name-only
 ## 注意事項
 - Antigravity や追加 reviewer が利用できない場合はメインセッション単独でレビューを実行する
 - スタイルのみの指摘 (linter で対応すべき)、好みの問題、曖昧な指摘は除外する
-- 検出元 (メインセッション / Antigravity / 追加 reviewer) を各指摘に付記する"""
+- 検出元 (メインセッション / Antigravity / 追加 reviewer) を各指摘に付記する
+`
 })
 ```
 
