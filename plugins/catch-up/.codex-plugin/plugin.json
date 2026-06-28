@@ -1,6 +1,6 @@
 {
   "name": "catch-up",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Codex 向けの技術調査、理解支援、バージョン追従ワークフローを提供する plugin です。",
   "skills": "./skills/",
   "interface": {

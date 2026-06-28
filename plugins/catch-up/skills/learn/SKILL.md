@@ -144,12 +144,24 @@ Checklist は説明が進むたびに更新し、確認済みの項目だけを 
 
 理解確認には、利用可能なら `AskUserQuestion` や同等の user input tool を使う。使えない場合は通常の chat 質問で進める。
 
+ただし、選択肢 tool が「recommended option を先頭に置く」契約を持つ場合、graded multiple choice quiz には使わない。その場合は通常の chat で `A`、`B`、`C` の選択肢を提示し、正解位置を固定しない。
+
 Quiz は以下を守る:
 
 - open-ended question と multiple choice question を混ぜる。
-- multiple choice は正解の位置を毎回変える。
+- multiple choice は正解の位置を毎回変える。正解を最初の選択肢に固定しない。
 - 回答前に正解を明かさない。
 - 間違いは短く補正し、必要なら checklist の未完了項目へ戻る。
+
+Multiple choice の選択肢順序は、String Seed of Thought (SSoT) の考え方を使って次のように決める:
+
+1. まずラベルなしで、正解 1 つと plausible distractor 2 つを作る。
+2. 回答前に表示しない内部 seed string を 1 つ生成する。
+3. seed string を文字コード和などの単純な規則で `0..N-1` に写像し、その位置へ正解を置く。
+4. 残りの選択肢も seed 由来の順序で並べ、直前の quiz と同じ正解ラベルが続く場合は次のラベルへ rotation する。
+5. 表示時は `A`、`B`、`C` のような中立ラベルだけを使い、`Recommended`、`正解候補`、太字などで答えを示唆しない。
+
+SSoT は「モデルに直接ランダムな位置を選ばせる」のではなく、内部 seed string を一度作り、それを機械的に選択肢順序へ写像するために使う。これにより、LLM がもっとも自然に見える先頭選択肢へ正解を置き続ける偏りを避ける。
 
 例:
 
@@ -159,9 +171,9 @@ Quiz は以下を守る:
 
 ```text
 質問: 今回の修正が最も直接守っている invariant はどれですか？
-A. request payload の順序を固定する
+A. cache を常に bypass する
 B. retry 前後で user-visible state を二重更新しない
-C. cache を常に bypass する
+C. request payload の順序を固定する
 ```
 
 ## Completion Rule
