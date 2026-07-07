@@ -1,6 +1,6 @@
 {
   "name": "git",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "commit、PR、CI、worktree を含む Codex 向け Git / GitHub plugin です。",
   "skills": "./skills/",
   "interface": {
