@@ -159,7 +159,7 @@ inline コメントに紐づかない指摘 (PR 画面で `#pullrequestreview-<i
 5. `comments.totalCount > 0` (inline コメントを伴うレビュー) は除外する (指摘の実体は inline スレッド側で対応するため。二重返信を防ぐ)
 6. 自分が 👍 リアクション済み (`reactionGroups` の `content == "THUMBS_UP"` かつ `viewerHasReacted == true`) のレビューは対応済みとして除外する
 
-**取得件数の注意:** `reviews` は作成日時の昇順で返るため、最新側を優先する `last: 100` を使用する。レビューが 100 件を超える PR では `pageInfo.hasPreviousPage` を確認し、`startCursor` を `before` に渡して前のページも取得して全件確認する (👍 マーク済みはフィルタで除外されるため、全ページを確認しても重複対応は発生しない)。
+**取得件数の注意:** `reviews` は作成日時の昇順で返るため、最新側を優先する `last: 100` を使用する。レビューが 100 件を超える PR では、`pageInfo.hasPreviousPage == true` の間、上記クエリの reviews 引数を `reviews(last: 100, before: "<startCursor>")` に置き換えて再実行し、前のページも取得して全件確認する (👍 マーク済みはフィルタで除外されるため、全ページを確認しても重複対応は発生しない)。
 
 除外後に未解決コメントまたは未対応レビュー本文があれば `HAD_ACTIVITY = true` にする。
 
