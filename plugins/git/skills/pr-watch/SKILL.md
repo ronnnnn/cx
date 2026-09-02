@@ -1,7 +1,7 @@
 ---
 name: pr-watch
 description: |
-  このスキルは、「PR を監視して」「PR をウォッチして」「PR を見張って」「watch PR」「monitor PR」「PR の監視を開始」「レビューと CI を自動修正して」「PR を自動で直して」「PR を自動修正して」などとリクエストした時に使用する。PR のレビューコメントと CI 失敗を 2 分間隔で定期監視し、自動で修正・コミット・プッシュ・返信を行う。pr-fix と pr-ci の機能を統合し、ユーザー確認なしに自律実行する。最大 30 分間監視する (活動検出時は最大 120 分)。
+  このスキルは、「PR を監視して」「PR をウォッチして」「PR を見張って」「watch PR」「monitor PR」「PR の監視を開始」「レビューと CI を自動修正して」「PR を自動で直して」「PR を自動修正して」などとリクエストした時に使用する。PR のレビューコメント (inline コメントを伴わないレビュー本文を含む) と CI 失敗を 2 分間隔で定期監視し、自動で修正・コミット・プッシュ・返信を行う。pr-fix と pr-ci の機能を統合し、ユーザー確認なしに自律実行する。最大 30 分間監視する (活動検出時は最大 120 分)。
 ---
 
 # PR 監視・自動修正ワークフロー
@@ -16,7 +16,7 @@ PR のレビューコメントと CI 失敗を定期監視し、検出次第自�
 4. **コミットメッセージは自前で生成する** - Conventional Commits / commitlint 設定に準拠
 5. **コミットメッセージ・返信コメントの言語は対象リポジトリに従う** - 既存の PR やコミット履歴を確認し、使用されている言語に合わせる
 6. **日本語でコミットメッセージ・返信コメントを書く場合は `japanese-text-style` スキルに従う**
-7. **対応不要と判断したレビューコメントは理由を返信して resolve する**
+7. **対応不要と判断した指摘にも理由を返信して対応済みにする** - inline スレッドは理由を返信して resolve する。inline コメントを伴わないレビュー本文 (review body) はスレッドが存在しないため resolve せず、PR コメントで返信して 👍 リアクションで対応済みマークを付ける
 8. **コンフリクトを検出したらユーザーに通知して監視を終了する**
 9. **修正で PR の実態が変わった場合のみ、タイトル・description を自動更新する** - 軽微な修正 (typo、lint、フォーマット) では更新しない。テンプレートや既存フォーマットを維持する
 
@@ -45,6 +45,8 @@ PR のレビューコメントと CI 失敗を定期監視し、検出次第自�
 - `CI_COMMITS`: CI 修正コミット数
 - `REPLIED_COMMENTS`: 返信済みコメント数
 - `RESOLVED_THREADS`: resolve 済みスレッド数
+- `HANDLED_REVIEW_BODIES`: 対応済みレビュー本文数 (👍 マーク済み)
+- `REPLIED_REVIEW_BODIES`: このセッションで返信投稿済みの review_id のリスト (👍 マーク失敗時に次サイクルで再検出されても返信を重複投稿しないための追跡。含まれる review_id は 👍 マークのみ再試行する)
 - `PR_UPDATES`: PR タイトル・description の更新回数
 
 ## 作業開始前の準備
@@ -90,7 +92,7 @@ gh pr view <number> --json state,mergeable --jq '{state, mergeable}'
 - `state` が `MERGED` / `CLOSED` → 監視終了
 - `mergeable` が `CONFLICTING` → ユーザーに通知して監視終了
 
-#### 2b. 未解決レビューコメントの取得
+#### 2b. 未解決レビューコメント・未対応レビュー本文の取得
 
 ```bash
 # <owner>, <repo>, <number> は実際の値に置き換える
@@ -113,19 +115,49 @@ query {
           }
         }
       }
+      reviews(last: 100) {
+        nodes {
+          id
+          databaseId
+          state
+          body
+          url
+          author { login }
+          comments(first: 1) {
+            totalCount
+          }
+          reactionGroups {
+            content
+            viewerHasReacted
+          }
+        }
+      }
     }
   }
 }'
 ```
 
-**フィルタ条件:**
+**フィルタ条件 (インラインコメント):**
 
 取得した `reviewThreads.nodes` に対して以下の条件でフィルタする:
 
 1. `isResolved == false` のスレッドのみを対象とする
 2. スレッドの最初のコメント (`comments.nodes[0].author.login`) が `MY_LOGIN` (ステップ 1 で取得済み) と一致するスレッドは除外する (自分によるコメントには返信・resolve しない)
 
-除外後に未解決コメントがあれば `HAD_ACTIVITY = true` にする。
+**フィルタ条件 (レビュー本文):**
+
+inline コメントに紐づかない指摘 (PR 画面で `#pullrequestreview-<id>` として表示されるレビュー本文) も対象とする。取得した `reviews.nodes` に対して以下の条件でフィルタする:
+
+1. `state` が `PENDING` または `DISMISSED` のレビューは除外する
+2. `body` が空のレビューは除外する (本文なしの approve / comment 等)
+3. `author` が null のレビューは除外する (削除ユーザー等。返信時のメンション先が存在しないため)
+4. `author.login` が `MY_LOGIN` と一致するレビューは除外する
+5. `comments.totalCount > 0` (inline コメントを伴うレビュー) は除外する (指摘の実体は inline スレッド側で対応するため。二重返信を防ぐ)
+6. 自分が 👍 リアクション済み (`reactionGroups` の `content == "THUMBS_UP"` かつ `viewerHasReacted == true`) のレビューは対応済みとして除外する
+
+**取得件数の注意:** `reviews` は作成日時の昇順で返るため、最新側を優先する `last: 100` を使用する。
+
+除外後に未解決コメントまたは未対応レビュー本文があれば `HAD_ACTIVITY = true` にする。
 
 #### 2c. CI 失敗の確認
 
@@ -139,7 +171,9 @@ gh run list --commit "$HEAD_SHA" --json databaseId,status,conclusion,name --limi
 - run 結果が空 (プッシュ直後で CI 未開始) の場合も CI 修正をスキップする
 - `UNFIXABLE_RUNS` に含まれる run ID はスキップする
 
-#### 2d. レビュー修正の実行 (未解決コメントがある場合)
+#### 2d. レビュー修正の実行 (未解決コメント・未対応レビュー本文がある場合)
+
+レビュー本文に複数の指摘が含まれる場合は指摘ごとに分解して判断する。
 
 **妥当性判断の基準:**
 
@@ -183,7 +217,7 @@ gh run list --commit "$HEAD_SHA" --json databaseId,status,conclusion,name --limi
 
 **処理フロー:**
 
-1. 各未解決コメントの妥当性を上記基準で判断し、ファクトチェックで検証する
+1. 各未解決コメント・未対応レビュー本文の妥当性を上記基準で判断し、ファクトチェックで検証する
 2. 修正が必要なコメントに対してコードを修正する
 3. 修正したファイルをステージングする: `git add <修正ファイル>`
 4. コミットメッセージを自前で生成する:
@@ -209,7 +243,7 @@ gh run list --commit "$HEAD_SHA" --json databaseId,status,conclusion,name --limi
    ```
 
 6. `git push` でリモートに反映する
-7. 各コメントに返信・リアクション・resolve を実行する:
+7. 各コメント・レビュー本文に返信・リアクション・resolve (スレッドのみ) を実行する:
 
    ```bash
    # 元のコメントに +1 リアクション (databaseId 使用)
@@ -234,7 +268,45 @@ gh run list --commit "$HEAD_SHA" --json databaseId,status,conclusion,name --limi
    }'
    ```
 
-**処理順序:** リアクション追加 → 返信投稿 → resolve。エラーが発生しても続行し、失敗を記録する。
+   **レビュー本文への対応 (スレッドが存在しない場合):** スレッド返信・resolve の代わりに、PR コメントで返信して 👍 リアクションで対応済みマークを付ける (マークを付けないと次回サイクル・次回セッションで再処理されるため必須)。
+
+   信頼できないレビュー本文を含むため、シェルを介さずファイル編集ツールで返信本文を一時ファイルに書き出し、`--body-file` でそのパスを渡す。シェル補間 (`--body "..."`) や heredoc は、本文中の `$()`・バッククォート・デリミタと同一の行によってローカルでコマンド実行され得るため使用しない。
+
+   まずファイル編集ツールで `/tmp/pr-<number>-review-reply-<review_databaseId>.md` に以下の形式で書き出す:
+
+   ```markdown
+   @<reviewer>
+
+   > <元のレビュー本文の引用 (長い場合は要約)>
+
+   <返信本文>
+   ```
+
+   次に書き出したファイルのパスを渡して投稿し、👍 リアクションで対応済みマークを付ける:
+
+   ```bash
+   # 返信: PR コメントとして投稿
+   gh pr comment <number> --body-file /tmp/pr-<number>-review-reply-<review_databaseId>.md
+
+   # 対応済みマーク: レビュー本文に 👍 リアクションを追加 (GraphQL mutation)
+   # REST の reactions API はレビュー本文に対応していないため GraphQL を使用する
+   # <review_id> は 2b で取得した reviews の id (GraphQL node ID) を使用
+   gh api graphql -F query='
+   mutation {
+     addReaction(input: {subjectId: "<review_id>", content: THUMBS_UP}) {
+       reaction { content }
+     }
+   }'
+   ```
+
+**処理順序:**
+
+- **スレッド:** 元コメントに +1 リアクション追加 → スレッドに返信投稿 → resolve
+- **レビュー本文:** PR コメントで返信投稿 → レビュー本文に 👍 リアクション追加 (対応済みマーク)
+
+エラーが発生しても続行し、失敗を記録する。
+
+**失敗時の再試行 (レビュー本文):** 返信と 👍 マークの成否を個別に追跡する。返信に成功したら review_id を `REPLIED_REVIEW_BODIES` に記録する。👍 マークに失敗した場合、次サイクルで同じレビュー本文が再検出されても `REPLIED_REVIEW_BODIES` に含まれる場合は返信を再投稿せず 👍 マークのみ再試行する (重複返信の防止)。監視終了時にも 👍 マークが失敗したままの場合は完了報告に記載し、手動での対応済みマークを依頼する (未マークのままだと次回セッションで重複返信されるため)。
 
 **返信テンプレート:**
 
@@ -262,7 +334,7 @@ ref: https://go.dev/ref/spec#Index_expressions
 現状のままとさせてください。
 ```
 
-カウンタを更新: `REVIEW_COMMITS`, `REPLIED_COMMENTS`, `RESOLVED_THREADS`。
+カウンタを更新: `REVIEW_COMMITS`, `REPLIED_COMMENTS`, `RESOLVED_THREADS`, `HANDLED_REVIEW_BODIES`。
 
 #### 2e. CI 修正の実行 (失敗がある場合)
 
@@ -383,6 +455,8 @@ sleep 120
 - 修正コミット数: X
 - 返信済みコメント数: Y
 - resolve 済みスレッド数: Z
+- 対応済みレビュー本文数: W (👍 マーク済み。0 の場合は省略)
+- 返信・👍 マークに失敗したレビュー本文: (該当する場合のみ review URL と失敗内容を記載)
 
 ### CI 修正
 - 修正コミット数: A
@@ -402,7 +476,7 @@ PR URL: <url>
 ```
 ## PR 状態確認完了
 
-全ての CI チェックが成功しており、未解決のレビューコメントもありません。
+全ての CI チェックが成功しており、未解決のレビューコメント・未対応のレビュー本文もありません。
 監視を開始しましたが、現時点で対応が必要な項目はありません。
 30 分間の監視を継続します。新しいレビューや CI 失敗が発生次第、自動修正します。
 ```
